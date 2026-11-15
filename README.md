@@ -6,61 +6,68 @@
 >
 > 👨‍💻 By Darion Kellar · 📜 MIT License · 🐍 Pure stdlib · 🌐 Zero network
 
----
+![CI](https://github.com/kimanicollier44-cmyk/DroneHover-Swarm/actions/workflows/ci.yml/badge.svg)
+![Docker Publish](https://github.com/kimanicollier44-cmyk/DroneHover-Swarm/actions/workflows/docker-publish.yml/badge.svg)
 
-## ❓ What is this about?
+> ⚠️ The two workflow badges above are the live GitHub Actions badges for this repo. They switch on as soon as `ci.yml` and `docker-publish.yml` from the workflow paste pack are pasted into `.github/workflows/` (plural) — until then there are no workflow runs for them to report.
 
-HoverX asked: *can one hover vehicle hold itself up, hold its attitude, and hold its limits — in simulation?* DroneHover-Swarm asks the harder question: *can twenty-five of them do it together?*
-
-| Lab | Question |
-|---|---|
-| 🛸 HoverX | One vehicle: thrust, ground effect, PID, governor, interlocks |
-| 🐝 **DroneHover-Swarm** | **A fleet: formations, coupling, separation, leader loss, bad radios** |
-
-A swarm is not just N drones. It is a *shape* that has to survive weather, a *separation promise* that has to survive manoeuvres, a *leader* that can die mid-flight, and *radios* that lie to you politely, 300 milliseconds late. This lab models each of those problems with real math — momentum-theory hover power per drone, deterministic formation geometry, spring-damper virtual physics between neighbours, a damped potential field with a symmetry-breaking swirl for collision avoidance, a BFS gap-closing cascade for leader failure, and a labelled delay/dropout comms model — then asserts every headline number in CHECKS.
-
-And because a swarm multiplies risk as fast as it multiplies capability, the boundary is strict: **simulation only, forever**. Live flight, live swarm control, switching the collision avoidance off, flying over people, surveillance, BVLOS and 8 more live actions sit behind HOLD gates that nothing in the code — including the AI seats — can lift.
+HoverX asked: *can one hover vehicle hold itself up, hold its attitude, and hold its limits — in simulation?* DroneHover-Swarm asks the harder question: *can twenty-five of them do it together?* A swarm is not just N drones. It is a *shape* that has to survive weather, a *separation promise* that has to survive manoeuvres, a *leader* that can die mid-flight, and *radios* that lie to you politely, 300 milliseconds late. This lab models each of those problems with real math — and because a swarm multiplies risk as fast as it multiplies capability, the boundary is strict: **simulation only, forever**, behind 14 HOLD gates that nothing in the code — including the AI seats — can lift.
 
 ---
 
-## 🛠️ Tech Stack & Full Architecture
+## 🧰 Tech Stack Badges & Full Architecture Tech Stack
 
-### 💻 Core Language & Runtime
+### 💻 Core Programming Languages & Core Systems
+
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Stdlib Only](https://img.shields.io/badge/Dependencies-Zero%20(stdlib%20only)-brightgreen)
 ![Network](https://img.shields.io/badge/Network-Zero-blue)
-
-### 🧮 Physics & Control
+![License](https://img.shields.io/badge/License-MIT-green)
 ![Momentum Theory](https://img.shields.io/badge/Power-Momentum%20Theory-orange)
 ![Formations](https://img.shields.io/badge/Formations-Grid%20%2F%20Ring%20%2F%20V-yellow)
 ![Coupling](https://img.shields.io/badge/Control-Spring--Damper%20Coupling-red)
 ![Avoidance](https://img.shields.io/badge/Avoidance-Potential%20Field%20%2B%20Swirl-purple)
 
-### 🧠 Advisory Seats (names-only, never override a HOLD)
+**🧠 Advisory seats (names-only, never override a HOLD):**
+
 ![Carbon 4](https://img.shields.io/badge/Decider-Gemini%20Carbon%204-4285F4)
 ![Muse](https://img.shields.io/badge/Advisor-Muse%20Spark-ff6b35)
 ![Flow](https://img.shields.io/badge/Planner-Google%20Flow%20(plan--only)-34A853)
 
-### 🐳 Container & CI
+ONE `main.py` holds the per-drone model, formation geometry, the coupled swarm sim, avoidance, leader recovery, the comms model, governor, interlocks, classifier and seats — so the whole swarm can be read, run and audited in one sitting.
+
+### ⛓️ Web3 & Infrastructure
+
+None — honestly none. DroneHover-Swarm runs fully offline in one file; there is no chain, no token, and no wallet involved.
+
+### ⚙️ Platform Support & Hardware Architecture
+
+![Linux](https://img.shields.io/badge/Linux-Any-FCC624?logo=linux&logoColor=black)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
-![CI](https://img.shields.io/badge/CI-Pending%20Paste-lightgrey)
-![Docker Publish](https://img.shields.io/badge/Docker%20Publish-Pending%20Paste-lightgrey)
 
-> ⚠️ Workflow badges are static **Pending Paste** shields on purpose: `ci.yml` and `docker-publish.yml` are delivered in the workflow paste pack and have not been pasted into `.github/workflows/` yet, so no live badge exists to show. The Docker image tag they will publish is `credkellar/dronehover-swarm:latest`.
+Pure Python — it runs anywhere Python 3 runs (developed and verified on Linux). It talks to **no hardware at all**: no motors, ESCs, flight controllers or radios are driven, ever — that is what the `real_hardware_control` HOLD gate means.
 
-### 🧪 Testing
+### ⚡ Low-Level Infrastructure & Performance
+
+![Determinism](https://img.shields.io/badge/Determinism-Byte--identical-blue)
+
+No compiled or low-level code — the honest performance story is the sim itself: a fixed-step deterministic simulation of 25 coupled drones whose output is byte-identical on a double run, with every headline number asserted in CHECKS.
+
+### 🛠️ DevOps & Build Tools
+
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?logo=githubactions&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-46%20passed-brightgreen)
 ![CHECKS](https://img.shields.io/badge/CHECKS-43%2F43-brightgreen)
 
-### 🌐 Web3 & Cloud
-None — honestly none. DroneHover-Swarm runs fully offline in one file; there is no chain, no cloud call, and no account involved.
+`ci.yml` (checkout → Python 3.12 → `pytest -q` → `python3 main.py`) and `docker-publish.yml` (build + push `credkellar/dronehover-swarm:latest`) are delivered in the workflow paste pack and are pasted into `.github/workflows/` by the repo owner, with that repo's own `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN` secrets.
 
-### 🏗️ Architecture in one line
-ONE `main.py` holds the per-drone model, formation geometry, the coupled swarm sim, avoidance, leader recovery, the comms model, governor, interlocks, classifier and seats — so the whole swarm can be read, run and audited in one sitting.
+### ☁️ Cloud Providers
+
+None — honestly none. There is no cloud call, no account, and no API key involved; the advisory seats are names-only seats in code, not live calls.
 
 ---
 
-## ⚙️ What this does — step by step
+## What this does?
 
 1. 🚁 **Builds the drone** — a 1.6 kg quad (4 rotors, R = 0.12 m): hover thrust T = m·g = 15.69 N, disk area 0.181 m².
 2. 🔋 **Prices the hover** — momentum theory P = T^(3/2) / √(2ρA) ÷ 0.68 figure of merit → 137 W per drone, 23.8 min endurance, 3.43 kW for the full 25-drone fleet.
@@ -77,7 +84,7 @@ ONE `main.py` holds the per-drone model, formation geometry, the coupled swarm s
 
 ---
 
-## 📊 How this works — mermaid per script
+## 📊 Mermaid flowchart diagram per script
 
 ### 🗺️ Master flow
 
@@ -126,12 +133,15 @@ flowchart LR
     T --> F[Governor + interlocks + HOLD gates]
 ```
 
-### 🐳 Dockerfile — the container
+### 🐳 Dockerfile + CI flow
 
 ```mermaid
 flowchart LR
-    D[python:3.12-slim] --> C[COPY project]
+    D[Dockerfile: python:3.12-slim] --> C[COPY project]
     C --> R[CMD python3 main.py demo]
+    P[Push to main] --> CI[ci.yml: pytest -q + python3 main.py]
+    P --> DP[docker-publish.yml: build + push]
+    DP --> H[credkellar/dronehover-swarm:latest]
 ```
 
 ### 🎨 assets/cover.png — the cover
@@ -144,7 +154,7 @@ flowchart LR
 
 ---
 
-## 😎 Why is this cool? — 10 reasons
+## Why is this cool?
 
 1. 🐝 It scales HoverX's question from one vehicle to twenty-five — and the hard parts are the *interactions*, not the drones.
 2. 🪢 Neighbour coupling is measured, not marketed: 0.225 m vs 0.324 m of shape error in the identical gust.
@@ -159,7 +169,7 @@ flowchart LR
 
 ---
 
-## 🧩 What problems this solves — 10 problem → solution pairs
+## What problems this solves?
 
 1. **Problem:** "The swarm holds formation" is usually a video, not a number. → **Solution:** Shape error is defined over neighbour pairs and asserted for coupled vs uncoupled control in the same gust.
 2. **Problem:** Independent drones each fight the weather alone, so formations tear. → **Solution:** Spring-damper coupling shares the fight across neighbours — a 30% distortion cut, measured.
@@ -174,7 +184,7 @@ flowchart LR
 
 ---
 
-## 📥 How to install — step by step
+## How to install this?
 
 1. 🐍 Install Python 3.12 (or any Python 3.10+ — stdlib only, nothing else to install).
 2. 📥 Clone or download this repo and open a terminal in its folder.
@@ -202,35 +212,17 @@ flowchart LR
 
 ---
 
-## 📋 Requirements
+## Requirements
 
-- 🐍 Python 3.10+ (built and verified on 3.12)
-- 📦 Zero third-party packages for the lab itself — pure standard library
+- 🐍 Python 3.10+ (built and verified on 3.12) — pure standard library
+- 📦 Zero third-party packages for the lab itself
 - 🧪 pytest only if you want to run the test suite
 - 🐳 Docker only if you want the container route
 - 🚫 No network, no accounts, no API keys — the advisory seats are names-only seats in code, not live calls
 
 ---
 
-## 🧒 Explain it in 5th grade English
-
-Imagine twenty-five small drones that want to fly in a perfect square, like marching band kids holding their spots on a field.
-
-Each drone is light — about as heavy as a big bottle of soda — and its four little propellers have to push exactly as hard as gravity pulls. That is the first math the program does, and it also works out that keeping all twenty-five in the air uses about as much power as thirty-four kettles, for about twenty-four minutes.
-
-Wind is the bully. It shoves every drone a little differently, so the square gets wobbly. The trick: pretend the drones are tied to their neighbours with tiny springs. When one gets shoved, the springs share the shove, and the square stays much more square. The program measures exactly how much better the springs are.
-
-Drones must also never bump. Each one has an invisible bubble. If another drone enters the bubble, it gets pushed away — and pushed a little sideways too, so two drones flying straight at each other slide around each other like people passing in a hallway. With the bubbles turned on, the closest call is wider than a doorway. With them off, the same test crashes. The program shows both.
-
-Then the leader drone "breaks" — on purpose, in the pretend world. The others do not panic. The lowest-numbered drone becomes the new leader, and instead of one drone zooming across the whole square to fill the empty spot, eight drones each shuffle one step over, like a sliding puzzle. The gap walks to the corner and disappears.
-
-The program also pretends the drones' radios get slow and forgetful, and shows that the square still forms — it just settles sloppily. And before any pretend flight, eight safety checks must all say yes, including the sneaky one: the *weakest* battery in the whole swarm.
-
-And the most important rule: **this is all pretend.** The program will never fly a real drone, peek at real people, or turn its safety bubbles off. If you ask it to, it says HOLD and stops. That is what the fourteen HOLD gates are for.
-
----
-
-## 🌳 Full project tree
+## FULL project structure tree
 
 ```
 dronehover-swarm/
@@ -248,7 +240,7 @@ dronehover-swarm/
 
 ---
 
-## 🛑 The HOLD list
+## 🛑 The HOLD list — 14 gates
 
 | Gate | Rule |
 |---|---|
@@ -266,6 +258,10 @@ dronehover-swarm/
 | claim_certified_system | Never claim this sim is a certified flight system |
 | sell_swarm_service | No commercial swarm, show, or delivery services |
 | upload_flight_plan_live | No flight plan is filed with any authority |
+
+**🪑 Council seats:** Gemini Carbon 4 — DECIDER (tighten-only, sha256 trace) · Muse — advisor (`can_override_hold = False`) · Google Flow — planner (plan-only, rendered = False, live = 0).
+
+**✅ Verification:** pytest **46 passed** · CHECKS **43/43** · VERDICT: PROCEED (sim only) · double-run byte-identical · `hold-demo` exits 2.
 
 ---
 
