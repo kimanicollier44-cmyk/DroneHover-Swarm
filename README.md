@@ -1,4 +1,4 @@
-![DroneHover-Swarm cover](assets/cover.png)
+![DroneHover-Swarm cover](DroneHover-Swarm%20cover.png)
 
 # 🐝 DroneHover-Swarm — Hover Drone Swarm Coordination Lab
 
